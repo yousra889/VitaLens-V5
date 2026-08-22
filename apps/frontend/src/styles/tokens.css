@@ -1,0 +1,30 @@
+:root {
+  /* Ink & surfaces */
+  --ink: #14251f;
+  --ink-soft: #3c5049;
+  --sand: #e4dac3;
+  --paper: #fbf8f2;
+  --line: #d3c6a8;
+
+  /* Brand: deep teal (health / Atlantic coast), used as the
+     dominant accent - not the generic blue "tech" default */
+  --teal: #1b6e62;
+  --teal-deep: #0f433b;
+  --teal-tint: #dcebe6;
+
+  /* Sparse secondary accent only - zellige gold, never used as
+     a background wash, only small marks (badges, one underline) */
+  --gold: #a8792c;
+
+  /* Status */
+  --danger: #a3392a;
+
+  /* Type */
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Scale */
+  --radius: 6px;
+  --shadow-card: 0 1px 2px rgba(20, 37, 31, 0.06), 0 6px 20px rgba(20, 37, 31, 0.08);
+}

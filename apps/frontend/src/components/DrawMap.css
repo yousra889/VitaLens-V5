@@ -1,0 +1,39 @@
+.draw-map {
+  position: relative;
+  height: 100%;
+}
+
+.draw-map__container {
+  height: 100%;
+  width: 100%;
+  background: var(--teal-tint);
+}
+
+.draw-map__hint {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 500;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.city-label {
+  background: var(--paper) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  font-weight: 600;
+  box-shadow: none !important;
+  padding: 1px 6px !important;
+}
+
+.city-label::before {
+  display: none;
+}

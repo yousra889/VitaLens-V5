@@ -1,0 +1,46 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 2rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--teal-deep);
+}
+
+.navbar__mark {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: conic-gradient(from 210deg, var(--teal), var(--teal-tint), var(--teal));
+  box-shadow: inset 0 0 0 3px var(--paper), 0 0 0 1.5px var(--teal);
+}
+
+.navbar__links {
+  display: flex;
+  gap: 1.75rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.navbar__links a {
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar__links a:hover {
+  color: var(--teal-deep);
+  border-color: var(--teal);
+}

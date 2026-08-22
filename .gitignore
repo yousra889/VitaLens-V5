@@ -1,0 +1,28 @@
+﻿# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+
+# env
+.env
+.env.local
+infra/k8s/*-secret.yaml
+!infra/k8s/*.example.yaml
+
+# terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# misc
+.DS_Store
+*.log
+coverage/
+.venv/
+__pycache__/
+*.pyc
+*.duckdb
+*.duckdb.wal

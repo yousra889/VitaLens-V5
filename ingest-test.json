@@ -1,0 +1,23 @@
+﻿{
+  "source_id": "manual-test",
+  "records": [
+    {
+      "nom": "Test Hospital VitaLens",
+      "type": "hospital",
+      "commune": "Rabat",
+      "province": "Rabat",
+      "region": "Rabat-Salé-Kénitra",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-6.8498, 33.9716]
+      },
+      "source_id": "manual-test",
+      "osm_id": null,
+      "amenity": "hospital",
+      "phone": null,
+      "website": null,
+      "opening_hours": null,
+      "categorie": "hospital"
+    }
+  ]
+}

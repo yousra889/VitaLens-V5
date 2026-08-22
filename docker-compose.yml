@@ -1,0 +1,54 @@
+
+
+services:
+  # NO mongo service needed!
+
+  geo-service:
+    build:
+      context: ./apps/geo-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_PATH: /data/vitalens.duckdb
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - geo-data:/data
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=sqlite
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=change_me_prod
+    volumes:
+      - n8n-data:/home/node/.n8n
+    depends_on:
+      - geo-service
+
+  gateway:
+    build: ./apps/gateway
+    ports:
+      - "3000:3000"
+    environment:
+      JWT_SECRET: dev-secret-change-me
+      ADMIN_EMAIL: admin@vitalens.local
+      ADMIN_PASSWORD_HASH: ""
+      FRONTEND_ORIGIN: http://localhost:5173
+      GEO_SERVICE_URL: http://geo-service:8000
+    depends_on:
+      - geo-service
+
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - gateway
+
+volumes:
+  geo-data:
+  n8n-data:
