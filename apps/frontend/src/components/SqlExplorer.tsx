@@ -11,18 +11,14 @@ import {
 import "leaflet/dist/leaflet.css";
 import "./SqlExplorer.css";
 
-interface SqlGeometry {
-  type: string;
-  coordinates: [number, number];
-}
-
 interface SqlResult {
   id: string | number;
   nom: string;
   type: string;
   commune?: string;
   province?: string;
-  geometry?: SqlGeometry;
+  longitude?: number;
+  latitude?: number;
 }
 
 function MapAutoFit({ results }: { results: SqlResult[] }) {
@@ -32,14 +28,14 @@ function MapAutoFit({ results }: { results: SqlResult[] }) {
     const points = results
       .filter(
         (item) =>
-          item.geometry?.type === "Point" &&
-          Array.isArray(item.geometry.coordinates) &&
-          item.geometry.coordinates.length >= 2,
+          Number.isFinite(item.latitude) &&
+          Number.isFinite(item.longitude),
       )
       .map((item) => {
-        const [longitude, latitude] = item.geometry!.coordinates;
-        return [latitude, longitude] as [number, number];
+        return [item.latitude!, item.longitude!] as [number, number];
       });
+
+    console.log("VALID MAP POINTS:", points.length);
 
     if (points.length === 0) {
       return;
@@ -67,10 +63,11 @@ export function SqlExplorer() {
   type,
   commune,
   province,
-  ST_AsGeoJSON(geometry) AS geometry
+  ST_X(geometry) AS longitude,
+  ST_Y(geometry) AS latitude
 FROM medical_data_records
 WHERE type = 'hospital'
-LIMIT 100;`
+  AND geometry IS NOT NULL;`,
   );
 
   const [results, setResults] = useState<SqlResult[]>([]);
@@ -92,98 +89,75 @@ LIMIT 100;`
           body: JSON.stringify({
             sql,
           }),
-        }
+        },
       );
 
       const data = await response.json();
+
       console.log("SQL RESPONSE:", data);
 
       if (!response.ok) {
         throw new Error(
-          data?.message || `SQL query failed (${response.status})`
+          data?.message ||
+            `SQL query failed (${response.status})`,
         );
       }
 
       /*
-       * ST_AsGeoJSON() returns geometry as a JSON string.
+       * Backend returns SQL rows as arrays:
        *
-       * Example:
-       * "{\"type\":\"Point\",\"coordinates\":[-6.8498,33.9716]}"
-       *
-       * Leaflet needs an actual JavaScript object, so we parse it here.
+       * [
+       *   id,
+       *   nom,
+       *   type,
+       *   commune,
+       *   province,
+       *   longitude,
+       *   latitude
+       * ]
        */
+
       const parsedRows: SqlResult[] = (data.rows ?? []).map(
-        (row: any) => {
-            // Backend returns SQL rows as arrays:
-            // [id, nom, type, commune, province, geometry]
+        (row: any[]) => ({
+          id: row[0],
+          nom: row[1],
+          type: row[2],
+          commune: row[3],
+          province: row[4],
+          longitude: Number(row[5]),
+          latitude: Number(row[6]),
+        }),
+      );
 
-            if (Array.isArray(row)) {
-            let geometry: SqlGeometry | undefined;
+      console.log("PARSED ROWS:", parsedRows);
 
-            if (typeof row[5] === "string") {
-                try {
-                geometry = JSON.parse(row[5]);
-                } catch {
-                geometry = undefined;
-                }
-            } else if (
-                row[5] &&
-                typeof row[5] === "object"
-            ) {
-                geometry = row[5];
-            }
-
-            return {
-                id: row[0],
-                nom: row[1],
-                type: row[2],
-                commune: row[3],
-                province: row[4],
-                geometry,
-            };
-            }
-
-            // Also support object-shaped rows just in case
-            let geometry: SqlGeometry | undefined;
-
-            if (typeof row.geometry === "string") {
-            try {
-                geometry = JSON.parse(row.geometry);
-            } catch {
-                geometry = undefined;
-            }
-            } else if (
-            row.geometry &&
-            typeof row.geometry === "object"
-            ) {
-            geometry = row.geometry;
-            }
-
-            return {
-            ...row,
-            geometry,
-            };
-        }
-        );
-
-        console.log("PARSED ROWS:", parsedRows);
-        console.log(
+      console.log(
         "MAP POINTS:",
         parsedRows.map((item) => ({
-            id: item.id,
-            nom: item.nom,
-            geometryType: item.geometry?.type,
-            coordinates: item.geometry?.coordinates,
+          id: item.id,
+          nom: item.nom,
+          longitude: item.longitude,
+          latitude: item.latitude,
         })),
-        );
+      );
 
-        setResults(parsedRows);
+      const validPoints = parsedRows.filter(
+        (item) =>
+          Number.isFinite(item.latitude) &&
+          Number.isFinite(item.longitude),
+      );
 
+      console.log(
+        "VALID MAP POINTS:",
+        validPoints.length,
+      );
+
+      setResults(parsedRows);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "SQL query failed"
+          : "SQL query failed",
       );
 
       setResults([]);
@@ -212,12 +186,14 @@ LIMIT 100;`
                 height="18"
                 rx="2"
               />
+
               <line
                 x1="9"
                 y1="9"
                 x2="15"
                 y2="9"
               />
+
               <line
                 x1="9"
                 y1="15"
@@ -252,7 +228,9 @@ LIMIT 100;`
 
         <textarea
           value={sql}
-          onChange={(event) => setSql(event.target.value)}
+          onChange={(event) =>
+            setSql(event.target.value)
+          }
           spellCheck={false}
           placeholder="Écrivez votre requête SQL..."
           className="sql-editor__textarea"
@@ -273,12 +251,14 @@ LIMIT 100;`
                 cy="12"
                 r="10"
               />
+
               <line
                 x1="12"
                 y1="8"
                 x2="12"
                 y2="12"
               />
+
               <line
                 x1="12"
                 y1="16"
@@ -328,17 +308,12 @@ LIMIT 100;`
 
       <div className="sql-map">
         <MapContainer
-        center={[31.5, -7]}
-        zoom={6}
-        className="sql-map__container"
+          center={[31.5, -7]}
+          zoom={6}
+          className="sql-map__container"
         >
-        <MapAutoFit results={results} />
+          <MapAutoFit results={results} />
 
-        <TileLayer
-            attribution="&copy; OpenStreetMap contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -346,38 +321,26 @@ LIMIT 100;`
 
           {results.map((item, index) => {
             if (
-              !item.geometry ||
-              item.geometry.type !== "Point" ||
-              !Array.isArray(item.geometry.coordinates) ||
-              item.geometry.coordinates.length < 2
+              !Number.isFinite(item.latitude) ||
+              !Number.isFinite(item.longitude)
             ) {
               return null;
             }
 
-            const [longitude, latitude] =
-              item.geometry.coordinates;
-
-            /*
-             * GeoJSON coordinates are:
-             *
-             * [longitude, latitude]
-             *
-             * Leaflet expects:
-             *
-             * [latitude, longitude]
-             */
             return (
-                <CircleMarker
+              <CircleMarker
                 key={`${item.id}-${index}`}
-                center={[latitude, longitude]}
+                center={[
+                  item.latitude!,
+                  item.longitude!,
+                ]}
                 radius={8}
                 fillColor="#00d4aa"
                 color="#ffffff"
                 weight={2}
                 opacity={1}
                 fillOpacity={1}
-                >
-              
+              >
                 <Popup className="sql-popup">
                   <div className="sql-popup__content">
                     <div className="sql-popup__name">
@@ -408,4 +371,4 @@ LIMIT 100;`
       </div>
     </div>
   );
-}
+} 
