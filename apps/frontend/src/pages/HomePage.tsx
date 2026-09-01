@@ -1,25 +1,52 @@
 import { useState } from "react";
-import { NavBar } from "../components/NavBar";
-import { DrawMap } from "../components/DrawMap";
-import { ResultsPanel } from "../components/ResultsPanel";
-import { SqlExplorer } from "../components/SqlExplorer";
+
+import {
+  Code2,
+  Map as MapIcon,
+  Search,
+  Sparkles,
+} from "lucide-react";
+
 import { queryZone } from "../api/client";
-import type { Establishment, GeoJSONPolygon } from "../api/client";
+
+import type {
+  Establishment,
+  GeoJSONPolygon,
+} from "../api/client";
+
+import { AppShell } from "../components/layout/AppShell";
+
+import { DrawMap } from "../components/workspace/DrawMap.tsx";
+
+import { ResultsPanel } from "../components/workspace/ResultsPanel.tsx";
+
+import { SqlExplorer } from "../components/workspace/SqlExplorer.tsx";
+
 import "./HomePage.css";
 
 type QueryStatus = "idle" | "loading" | "error" | "done";
+
 type Mode = "draw" | "sql";
 
 export function HomePage() {
   const [mode, setMode] = useState<Mode>("draw");
-  const [status, setStatus] = useState<QueryStatus>("idle");
-  const [establishments, setEstablishments] = useState<Establishment[]>([]);
 
-  async function handleZoneDrawn(polygon: GeoJSONPolygon) {
+  const [status, setStatus] =
+    useState<QueryStatus>("idle");
+
+  const [establishments, setEstablishments] =
+    useState<Establishment[]>([]);
+
+  async function handleZoneDrawn(
+    polygon: GeoJSONPolygon,
+  ) {
     setStatus("loading");
+
     try {
       const result = await queryZone(polygon);
+
       setEstablishments(result.establishments);
+
       setStatus("done");
     } catch {
       setStatus("error");
@@ -31,83 +58,156 @@ export function HomePage() {
     setStatus("idle");
   }
 
+  function switchMode(nextMode: Mode) {
+    setMode(nextMode);
+  }
+
   return (
-    <div className="home">
-      <NavBar />
+    <AppShell>
+      <div className="home-page">
+        <section className="hero" id="explore">
+          <div className="hero__background" />
 
-      <section className="home__hero" id="carte">
-        <div className="hero__content">
-          <h1 className="hero__title">
-            Explorez les établissements de santé
-            <br />
-            <span className="hero__highlight">du Maroc en temps réel</span>
-          </h1>
-          <p className="hero__subtitle">
-            Cartographie interactive et recherche SQL avancée des installations
-            médicales
-          </p>
-        </div>
+          <div className="hero__content">
+            <div className="hero__eyebrow">
+              <Sparkles size={14} />
+              <span>Morocco health intelligence</span>
+            </div>
 
-        {/* Mode Toggle */}
-        <div className="mode__toggle">
-          <button
-            className={`mode__btn mode__btn--draw ${
-              mode === "draw" ? "active" : ""
-            }`}
-            onClick={() => setMode("draw")}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-            </svg>
-            Dessiner
-          </button>
+            <h1 className="hero__title">
+              See Morocco&apos;s
+              <br />
+              healthcare infrastructure
+              <span className="hero__gradient">
+                {" "}with clarity.
+              </span>
+            </h1>
 
-          <button
-            className={`mode__btn mode__btn--sql ${mode === "sql" ? "active" : ""}`}
-            onClick={() => setMode("sql")}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <line x1="9" y1="9" x2="15" y2="9" />
-              <line x1="9" y1="15" x2="15" y2="15" />
-            </svg>
-            Requête SQL
-          </button>
-        </div>
-      </section>
+            <p className="hero__subtitle">
+              Explore, analyze, and query healthcare
+              establishments across Morocco through
+              interactive geographic data.
+            </p>
 
-      {/* Draw Mode */}
-      {mode === "draw" && (
-        <section className="home__workspace draw-mode">
-          <DrawMap onZoneDrawn={handleZoneDrawn} onCleared={handleCleared} />
-          <ResultsPanel
-            status={status}
-            count={establishments.length}
-            establishments={establishments}
-          />
+            <div className="hero__actions">
+              <a
+                className="button button--primary"
+                href="#workspace"
+              >
+                <Search size={17} />
+                Explore data
+              </a>
+
+              <button
+                className="button button--secondary"
+                onClick={() => switchMode("sql")}
+              >
+                <Code2 size={17} />
+                Open SQL Explorer
+              </button>
+            </div>
+          </div>
+
+          <div className="hero__metrics">
+            <div className="metric-card metric-card--primary">
+              <span className="metric-card__label">
+                Platform
+              </span>
+
+              <span className="metric-card__value">
+                Live
+              </span>
+
+              <span className="metric-card__meta">
+                Gateway connected
+              </span>
+            </div>
+
+            <div className="metric-card">
+              <span className="metric-card__label">
+                Coverage
+              </span>
+
+              <span className="metric-card__value">
+                Morocco
+              </span>
+
+              <span className="metric-card__meta">
+                Geographic health data
+              </span>
+            </div>
+          </div>
         </section>
-      )}
 
-      {/* SQL Mode */}
-      {mode === "sql" && (
-        <section className="home__workspace sql-mode">
-          <SqlExplorer />
+        <section
+          className="workspace-section"
+          id="workspace"
+        >
+          <div className="workspace-section__header">
+            <div>
+              <span className="section-label">
+                Workspace
+              </span>
+
+              <h2>
+                Explore the data your way.
+              </h2>
+            </div>
+
+            <div className="mode-switcher">
+              <button
+                className={`mode-switcher__button ${
+                  mode === "draw"
+                    ? "mode-switcher__button--active"
+                    : ""
+                }`}
+                onClick={() => switchMode("draw")}
+              >
+                <MapIcon size={16} />
+                Map
+              </button>
+
+              <button
+                id="sql"
+                className={`mode-switcher__button ${
+                  mode === "sql"
+                    ? "mode-switcher__button--active"
+                    : ""
+                }`}
+                onClick={() => switchMode("sql")}
+              >
+                <Code2 size={16} />
+                SQL Explorer
+              </button>
+            </div>
+          </div>
+
+          <div
+            className={`workspace workspace--${mode}`}
+          >
+            {mode === "draw" && (
+              <>
+                <div className="workspace__map">
+                  <DrawMap
+                    onZoneDrawn={handleZoneDrawn}
+                    onCleared={handleCleared}
+                  />
+                </div>
+
+                <ResultsPanel
+                  status={status}
+                  count={establishments.length}
+                  establishments={establishments}
+                />
+              </>
+            )}
+
+            {mode === "sql" && (
+              <SqlExplorer />
+            )}
+          </div>
         </section>
-      )}
-    </div>
+      </div>
+    </AppShell>
   );
 }
