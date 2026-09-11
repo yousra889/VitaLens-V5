@@ -4,6 +4,7 @@ Seed sample medical facility data into DuckDB for testing.
 
 import json
 from datetime import datetime
+
 from app.db import db
 
 # Sample medical facilities in Morocco
@@ -151,7 +152,7 @@ def seed():
             "DELETE FROM medical_data_records WHERE source_id = 'sample'"
         )
         
-        inserted = 0
+
         for record in SAMPLE_DATA:
             geometry_json = json.dumps(record["geometry"])
             
@@ -175,7 +176,7 @@ def seed():
                     datetime.utcnow(),
                 ],
             )
-            inserted += 1
+
         
         # Verify
         count = db.execute(

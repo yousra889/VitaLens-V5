@@ -3,6 +3,7 @@ DuckDB database initialization and connection for VitaLens.
 """
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 import json
