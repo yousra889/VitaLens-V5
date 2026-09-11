@@ -6,15 +6,11 @@ import {
   Globe2,
   HeartPulse,
   Map,
-  ShieldCheck,
   Sparkles,
   Activity,
-  Search,
   Stethoscope,
   Pill,
   Hospital,
-  Users,
-  Code2,
   Layers3,
 } from "lucide-react";
 
