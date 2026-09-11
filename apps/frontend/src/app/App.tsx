@@ -1,15 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import { HomePage } from "../pages/HomePage";
+import { AppRoutes } from "./routes";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-
-        {/* /admin - Sprint 4 */}
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

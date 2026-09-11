@@ -385,7 +385,7 @@ async def execute_sql(sql: str = Query(...)):
 
     try:
         results = db.execute(
-            f"SELECT * FROM ({sql}) AS q LIMIT 500"
+            f"SELECT * FROM ({sql}) AS q "
         ).fetchall()
 
         safe_data = []
@@ -403,7 +403,6 @@ async def execute_sql(sql: str = Query(...)):
 
         return {
             "count": len(safe_data),
-            "limit": 500,
             "data": safe_data,
         }
 

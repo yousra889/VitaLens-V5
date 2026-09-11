@@ -1,0 +1,583 @@
+.map-page {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 56px;
+  overflow-x: hidden;
+  overflow-y: visible;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(32, 201, 189, 0.08),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(79, 169, 255, 0.08),
+      transparent 30%
+    ),
+    #111820;
+
+  color: #f1f5f7;
+}
+
+.map-page__workspace {
+  width: 100%;
+  height: 100vh;
+
+  padding-top: 56px;
+
+  display: grid;
+  grid-template-columns: 62% 38%;
+
+  overflow: hidden;
+}
+
+/* Keep both sides full-height */
+
+.map-page__workspace > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (max-width: 1000px) {
+  .map-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .map-page__workspace {
+    height: auto;
+    min-height: calc(100vh - 68px);
+
+    grid-template-columns: 1fr;
+  }
+
+  .map-page__workspace > .draw-map {
+    min-height: 650px;
+  }
+
+  .map-page__workspace > .results-panel {
+    min-height: 650px;
+  }
+}
+/* =========================================================
+   INTRO SECTION
+========================================================= */
+
+.map-page__intro {
+  position: relative;
+  padding: 75px 7vw 55px;
+
+  background:
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(32, 201, 189, 0.07),
+      transparent 30%
+    ),
+    #080d12;
+
+  overflow: hidden;
+}
+
+.map-page__intro-content {
+  max-width: 760px;
+}
+
+.map-page__eyebrow {
+  margin-bottom: 13px;
+
+  color: #50d8d0;
+
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+
+  text-shadow:
+    0 0 9px rgba(80, 216, 208, 0.45);
+}
+
+.map-page__title {
+  margin: 0;
+
+  color: #edf7f8;
+
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.08;
+  font-weight: 700;
+
+  letter-spacing: -0.04em;
+}
+
+.map-page__description {
+  max-width: 600px;
+
+  margin: 17px 0 21px;
+
+  color: #8299a2;
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.map-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 9px 13px;
+
+  border: 1px solid rgba(82, 173, 194, 0.18);
+  border-radius: 7px;
+
+  background: rgba(15, 29, 38, 0.72);
+
+  color: #91aab2;
+
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.map-page__back:hover {
+  color: #5be5db;
+
+  border-color: rgba(79, 213, 207, 0.38);
+
+  background: rgba(27, 52, 58, 0.82);
+
+  box-shadow:
+    0 0 18px rgba(32, 201, 189, 0.10);
+}
+
+
+/* =========================================================
+   EXISTING WORKSPACE
+========================================================= */
+
+.map-page__workspace {
+  width: 100%;
+  height: 760px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.map-page {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 56px;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(32, 201, 189, 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 12%,
+      rgba(79, 169, 255, 0.11),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(32, 201, 189, 0.055),
+      transparent 38%
+    ),
+    #111820;
+
+  color: #f1f5f7;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.map-page__header {
+  position: relative;
+
+  min-height: 190px;
+
+  padding: 38px clamp(24px, 5vw, 70px) 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid rgba(84, 221, 212, 0.12);
+
+  background:
+    radial-gradient(
+      circle at 72% 40%,
+      rgba(32, 201, 189, 0.10),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 25% 100%,
+      rgba(79, 169, 255, 0.06),
+      transparent 35%
+    ),
+    rgba(17, 24, 32, 0.94);
+
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.25),
+    0 0 30px rgba(32, 201, 189, 0.035);
+}
+
+
+/* decorative glow */
+
+.map-page__header::before {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: -120px;
+  top: -210px;
+
+  border-radius: 50%;
+
+  background: rgba(32, 201, 189, 0.06);
+
+  filter: blur(30px);
+
+  pointer-events: none;
+}
+
+.map-page__header::after {
+  content: "";
+
+  position: absolute;
+
+  left: 6%;
+  bottom: 0;
+
+  width: 280px;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(32, 201, 189, 0.65),
+    transparent
+  );
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.45),
+    0 0 28px rgba(32, 201, 189, 0.18);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.map-page__eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-bottom: 10px;
+
+  padding: 5px 9px;
+
+  color: #54ddd4;
+
+  border: 1px solid rgba(84, 221, 212, 0.30);
+
+  border-radius: 6px;
+
+  background: rgba(32, 201, 189, 0.06);
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-shadow:
+    0 0 8px rgba(84, 221, 212, 0.65),
+    0 0 18px rgba(32, 201, 189, 0.25);
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.10);
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.map-page__title {
+  margin: 0;
+
+  color: #f4f8f9;
+
+  font-size: clamp(1.8rem, 3vw, 3rem);
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: -0.055em;
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.035),
+    0 0 35px rgba(32, 201, 189, 0.04);
+}
+
+.map-page__title span {
+  color: #20c9bd;
+
+  text-shadow:
+    0 0 8px rgba(32, 201, 189, 0.65),
+    0 0 20px rgba(32, 201, 189, 0.38),
+    0 0 40px rgba(32, 201, 189, 0.15);
+}
+
+
+/* =========================================================
+   DESCRIPTION — ONE LINE
+========================================================= */
+
+.map-page__description {
+  max-width: 650px;
+
+  margin: 13px 0 0;
+
+  color: #a7b3c0;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 12px rgba(84, 221, 212, 0.04);
+}
+
+
+/* =========================================================
+   GLOWING BACK BUTTON
+========================================================= */
+
+.map-page__back {
+  position: relative;
+
+  z-index: 2;
+
+  flex-shrink: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 155px;
+
+  padding: 12px 18px;
+
+  color: #54ddd4;
+
+  border: 1px solid rgba(84, 221, 212, 0.38);
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 201, 189, 0.10),
+      rgba(15, 29, 40, 0.96)
+    );
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  text-shadow:
+    0 0 8px rgba(84, 221, 212, 0.55);
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.12),
+    0 0 28px rgba(32, 201, 189, 0.06),
+    inset 0 0 14px rgba(32, 201, 189, 0.035);
+
+  cursor: pointer;
+
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.map-page__back:hover {
+  color: #ffffff;
+
+  border-color: rgba(84, 221, 212, 0.70);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 201, 189, 0.16),
+      rgba(15, 29, 40, 0.98)
+    );
+
+  transform: translateX(-4px);
+
+  text-shadow:
+    0 0 10px rgba(84, 221, 212, 0.75);
+
+  box-shadow:
+    0 0 18px rgba(32, 201, 189, 0.25),
+    0 0 40px rgba(32, 201, 189, 0.12),
+    inset 0 0 18px rgba(32, 201, 189, 0.05);
+}
+
+
+/* =========================================================
+   MAP WORKSPACE
+   KEEP YOUR EXISTING WORKSPACE STYLING HERE
+========================================================= */
+
+.map-page__workspace {
+  position: relative;
+
+  min-height: calc(100vh - 246px);
+
+  padding: 30px clamp(18px, 5vw, 72px) 45px;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(32, 201, 189, 0.045),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 70%,
+      rgba(79, 169, 255, 0.045),
+      transparent 32%
+    ),
+    #111820;
+
+  color: #f1f5f7;
+}
+
+.map-page__workspace::before {
+  content: "";
+
+  position: absolute;
+
+  left: 10%;
+  right: 10%;
+
+  top: 0;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(32, 201, 189, 0.25),
+    rgba(79, 169, 255, 0.16),
+    transparent
+  );
+
+  box-shadow:
+    0 0 14px rgba(32, 201, 189, 0.16);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+  .map-page__header {
+    min-height: 220px;
+
+    padding:
+      38px
+      32px
+      35px;
+
+    gap: 30px;
+  }
+
+  .map-page__title {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+  }
+
+  .map-page__workspace {
+    padding: 24px 22px 35px;
+  }
+}
+
+@media (max-width: 700px) {
+  .map-page__header {
+    min-height: auto;
+
+    padding:
+      35px
+      22px
+      35px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .map-page__title {
+    font-size: clamp(2rem, 9vw, 3rem);
+
+    white-space: normal;
+  }
+
+  .map-page__description {
+    white-space: normal;
+
+    font-size: 11px;
+  }
+
+  .map-page__back {
+    margin-top: 5px;
+  }
+
+  .map-page__workspace {
+    padding: 18px 14px 28px;
+  }
+}

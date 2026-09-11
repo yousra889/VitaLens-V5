@@ -1,39 +1,28 @@
-import { Activity, Database, LayoutDashboard, Map } from "lucide-react";
+import { Layers3, ShieldCheck } from "lucide-react";
 
 import "./TopNav.css";
 
 export function TopNav() {
   return (
-    <header className="top-nav">
-      <a className="top-nav__brand" href="/">
-        <span className="top-nav__mark">
-          <Activity size={17} strokeWidth={2.5} />
+    <nav className="home-nav">
+      <a className="brand" href="/">
+        <span className="brand-mark">
+          <Layers3 size={23} />
         </span>
-
         <span>VitaLens</span>
       </a>
 
-      <nav className="top-nav__links">
-        <a href="#explore">
-          <Map size={15} />
-          Explorer
-        </a>
-
-        <a href="#sql">
-          <Database size={15} />
-          SQL
-        </a>
-
-        <a href="/admin">
-          <LayoutDashboard size={15} />
-          Admin
-        </a>
-      </nav>
-
-      <div className="top-nav__status">
-        <span className="top-nav__status-dot" />
-        <span>Live data</span>
+      <div className="nav-links">
+        <a href="/carte">Carte</a>
+        <a href="/dashboard">Données</a>
+        <a href="/sql">SQL Explorer</a>
+        <a href="/about">À propos</a>
       </div>
-    </header>
+
+      <a className="admin-link" href="/admin">
+        <ShieldCheck size={15} />
+        Admin
+      </a>
+    </nav>
   );
 }

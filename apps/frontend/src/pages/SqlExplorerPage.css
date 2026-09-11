@@ -1,0 +1,376 @@
+.sql-page {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 56px;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(32, 201, 189, 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 12%,
+      rgba(79, 169, 255, 0.11),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(32, 201, 189, 0.055),
+      transparent 38%
+    ),
+    #111820;
+
+  color: #f1f5f7;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+
+.sql-page__header {
+  position: relative;
+
+  min-height: 190px;
+  padding: 38px clamp(24px, 5vw, 70px) 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+
+  overflow: hidden;
+
+  border-bottom: 1px solid rgba(84, 221, 212, 0.12);
+
+  background:
+    radial-gradient(
+      circle at 72% 40%,
+      rgba(32, 201, 189, 0.10),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 25% 100%,
+      rgba(79, 169, 255, 0.06),
+      transparent 35%
+    ),
+    rgba(17, 24, 32, 0.94);
+
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.25),
+    0 0 30px rgba(32, 201, 189, 0.035);
+}
+
+/* decorative glow */
+
+.sql-page__header::before {
+  content: "";
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: -120px;
+  top: -210px;
+
+  border-radius: 50%;
+
+  background: rgba(32, 201, 189, 0.06);
+
+  filter: blur(30px);
+
+  pointer-events: none;
+}
+
+.sql-page__header::after {
+  content: "";
+
+  position: absolute;
+
+  left: 6%;
+  bottom: 0;
+
+  width: 280px;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(32, 201, 189, 0.65),
+    transparent
+  );
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.45),
+    0 0 28px rgba(32, 201, 189, 0.18);
+
+  pointer-events: none;
+}
+
+/* =========================
+   EYEBROW
+   ========================= */
+
+.sql-page__eyebrow {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 10px;
+  padding: 5px 9px;
+
+  color: #54ddd4;
+
+  border: 1px solid rgba(84, 221, 212, 0.30);
+  border-radius: 6px;
+
+  background: rgba(32, 201, 189, 0.06);
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+
+  text-shadow:
+    0 0 8px rgba(84, 221, 212, 0.65),
+    0 0 18px rgba(32, 201, 189, 0.25);
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.10);
+}
+
+/* =========================
+   TITLE
+   ========================= */
+
+.sql-page__title {
+  margin: 0;
+
+  color: #f4f8f9;
+
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: -0.055em;
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.035),
+    0 0 35px rgba(32, 201, 189, 0.04);
+}
+
+.sql-page__title span {
+  color: #20c9bd;
+
+  text-shadow:
+    0 0 8px rgba(32, 201, 189, 0.65),
+    0 0 20px rgba(32, 201, 189, 0.38),
+    0 0 40px rgba(32, 201, 189, 0.15);
+}
+
+/* =========================
+   DESCRIPTION
+   ========================= */
+
+.sql-page__description {
+  max-width: 650px;
+
+  margin: 13px 0 0;
+
+  color: #a7b3c0;
+
+  font-size: 11px;
+  line-height: 1.5;
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 12px rgba(84, 221, 212, 0.04);
+}
+/* =========================
+   BACK BUTTON
+   ========================= */
+
+.sql-page__back {
+  position: relative;
+  z-index: 2;
+
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 155px;
+
+  padding: 12px 18px;
+
+  color: #54ddd4;
+
+  border: 1px solid rgba(84, 221, 212, 0.38);
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 201, 189, 0.10),
+      rgba(15, 29, 40, 0.96)
+    );
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  text-shadow:
+    0 0 8px rgba(84, 221, 212, 0.55);
+
+  box-shadow:
+    0 0 12px rgba(32, 201, 189, 0.12),
+    0 0 28px rgba(32, 201, 189, 0.06),
+    inset 0 0 14px rgba(32, 201, 189, 0.035);
+
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.sql-page__back:hover {
+  color: #ffffff;
+
+  border-color: rgba(84, 221, 212, 0.70);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(32, 201, 189, 0.16),
+      rgba(15, 29, 40, 0.98)
+    );
+
+  transform: translateX(-4px);
+
+  text-shadow:
+    0 0 10px rgba(84, 221, 212, 0.75);
+
+  box-shadow:
+    0 0 18px rgba(32, 201, 189, 0.25),
+    0 0 40px rgba(32, 201, 189, 0.12),
+    inset 0 0 18px rgba(32, 201, 189, 0.05);
+}
+
+/* =========================
+   SQL WORKSPACE
+   IMPORTANT:
+   global.css has section { background: white }
+   so this MUST explicitly set the background.
+   ========================= */
+
+.sql-page__workspace {
+  position: relative;
+
+  min-height: calc(100vh - 366px);
+
+  padding: 30px clamp(18px, 5vw, 72px) 45px;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(32, 201, 189, 0.045),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 70%,
+      rgba(79, 169, 255, 0.045),
+      transparent 32%
+    ),
+    #111820;
+
+  color: #f1f5f7;
+}
+
+/* subtle horizontal glow */
+
+.sql-page__workspace::before {
+  content: "";
+
+  position: absolute;
+
+  left: 10%;
+  right: 10%;
+  top: 0;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(32, 201, 189, 0.25),
+    rgba(79, 169, 255, 0.16),
+    transparent
+  );
+
+  box-shadow:
+    0 0 14px rgba(32, 201, 189, 0.16);
+
+  pointer-events: none;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1000px) {
+  .sql-page__header {
+    min-height: 280px;
+
+    padding:
+      55px
+      32px
+      45px;
+
+    gap: 30px;
+  }
+
+  .sql-page__title {
+    font-size: clamp(2.8rem, 8vw, 4.5rem);
+  }
+
+  .sql-page__workspace {
+    padding: 24px 22px 35px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sql-page__header {
+    min-height: auto;
+
+    padding:
+      45px
+      22px
+      40px;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sql-page__title {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+
+  .sql-page__description {
+    font-size: 13px;
+  }
+
+  .sql-page__back {
+    margin-top: 5px;
+  }
+
+  .sql-page__workspace {
+    padding: 18px 14px 28px;
+  }
+}

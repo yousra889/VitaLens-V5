@@ -1,19 +1,12 @@
 import { useEffect, useRef } from "react";
-
 import { useMap } from "react-leaflet";
-
 import L from "leaflet";
-
 import "leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
-
 import type { GeoJSONPolygon } from "../../api/client";
 
 interface DrawControlProps {
-  onZoneDrawn: (
-    polygon: GeoJSONPolygon,
-  ) => void;
-
+  onZoneDrawn: (polygon: GeoJSONPolygon) => void;
   onCleared: () => void;
 }
 
@@ -23,70 +16,63 @@ export function DrawControl({
 }: DrawControlProps) {
   const map = useMap();
 
-  const drawnItemsRef =
-    useRef<L.FeatureGroup | null>(null);
-  
-  const callbacksRef = useRef({ onZoneDrawn, onCleared });
+  const drawnItemsRef = useRef<L.FeatureGroup | null>(null);
+
+  const callbacksRef = useRef({
+    onZoneDrawn,
+    onCleared,
+  });
 
   useEffect(() => {
-    callbacksRef.current = { onZoneDrawn, onCleared };
+    callbacksRef.current = {
+      onZoneDrawn,
+      onCleared,
+    };
   }, [onZoneDrawn, onCleared]);
 
   useEffect(() => {
-    if (!drawnItemsRef.current) {
-      const drawnItems = new L.FeatureGroup();
-      drawnItemsRef.current = drawnItems;
-      map.addLayer(drawnItems);
+    const drawnItems = new L.FeatureGroup();
 
-      const drawControl = new L.Control.Draw({
-        position: "topright",
+    drawnItemsRef.current = drawnItems;
+    map.addLayer(drawnItems);
 
-        draw: {
-          polygon: {
-            shapeOptions: {
-              color: "#5eead4",
-              weight: 2,
-              fillColor: "#14b8a6",
-              fillOpacity: 0.16,
-            },
+    const drawControl = new L.Control.Draw({
+      position: "topright",
+
+      draw: {
+        polygon: {
+          allowIntersection: false,
+          shapeOptions: {
+            color: "#22d3ee",
+            weight: 2,
+            opacity: 0.9,
+            fillColor: "#14b8a6",
+            fillOpacity: 0.2,
           },
-
-          marker: false,
-          circle: false,
-          circlemarker: false,
-          polyline: false,
-          rectangle: false,
         },
 
-        edit: {
-          featureGroup: drawnItems,
-          remove: true,
-        },
-      });
+        marker: false,
+        circle: false,
+        circlemarker: false,
+        polyline: false,
+        rectangle: false,
+      },
 
-      map.addControl(drawControl);
+      edit: {
+        featureGroup: drawnItems,
+        remove: true,
+      },
+    });
 
-      setTimeout(() => {
-        const sections = document.querySelectorAll('.leaflet-draw-section');
-        if (sections.length > 1) {
-          (sections[1] as HTMLElement).style.marginTop = '8px';
-        }
-      }, 100);
+    map.addControl(drawControl);
 
-      // Intercept delete button
-      const deleteButton = document.querySelector('.leaflet-draw-edit-remove') as HTMLElement;
-      if (deleteButton) {
-        deleteButton.addEventListener('click', () => {
-          console.log("Delete button clicked");
-          setTimeout(() => {
-            drawnItems.clearLayers();
-            callbacksRef.current.onCleared();
-          }, 100);
-        });
-      }
+    const sections = document.querySelectorAll(
+      ".leaflet-draw-section",
+    );
+
+    if (sections.length > 1) {
+      (sections[1] as HTMLElement).style.marginTop = "8px";
     }
-
-    const drawnItems = drawnItemsRef.current;
 
     function sendPolygon(layer: L.Polygon) {
       const geoJson = layer.toGeoJSON();
@@ -101,26 +87,56 @@ export function DrawControl({
     }
 
     const handleCreated = (event: L.LeafletEvent) => {
-      const createdEvent = event as L.DrawEvents.Created;
-      const layer = createdEvent.layer as L.Polygon;
+      const createdEvent =
+        event as L.DrawEvents.Created;
 
+      const layer =
+        createdEvent.layer as L.Polygon;
+
+      // Only one zone at a time
       drawnItems.clearLayers();
       drawnItems.addLayer(layer);
 
-      console.log("Polygon created");
-
-      layer.on('edit', () => {
-        console.log("Polygon edited");
+      layer.on("edit", () => {
         sendPolygon(layer);
       });
 
       sendPolygon(layer);
     };
 
-    map.on(L.Draw.Event.CREATED, handleCreated);
+    // THIS WAS MISSING
+    const handleDeleted = () => {
+      if (drawnItems.getLayers().length === 0) {
+        callbacksRef.current.onCleared();
+      }
+    };
+
+    map.on(
+      L.Draw.Event.CREATED,
+      handleCreated,
+    );
+
+    map.on(
+      L.Draw.Event.DELETED,
+      handleDeleted,
+    );
 
     return () => {
-      map.off(L.Draw.Event.CREATED, handleCreated);
+      map.off(
+        L.Draw.Event.CREATED,
+        handleCreated,
+      );
+
+      map.off(
+        L.Draw.Event.DELETED,
+        handleDeleted,
+      );
+
+      // Clean up Leaflet Draw properly
+      map.removeControl(drawControl);
+      map.removeLayer(drawnItems);
+
+      drawnItemsRef.current = null;
     };
   }, [map]);
 

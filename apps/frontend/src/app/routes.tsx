@@ -1,13 +1,19 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import { HomePage } from "../pages/HomePage";
+import HomePage  from "../pages/HomePage";
+import { MapPage } from "../pages/MapPage";
+import { SqlExplorerPage } from "../pages/SqlExplorerPage";
+import DashboardPage from "../pages/DashboardPage";
+import ComprendrePage from "../pages/ComprendrePage";
 
-export default function App() {
+export function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/carte" element={<MapPage />} />
+      <Route path="/sql" element={<SqlExplorerPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/comprendre" element={<ComprendrePage />} />
+    </Routes>
   );
 }
